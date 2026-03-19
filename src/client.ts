@@ -14,7 +14,7 @@ function getApiKey(): string {
 export async function get<T>(
   path: string,
   params?: Record<string, string | number | boolean | undefined>
-): Promise<T> {
+): Promise<{ data: T; remainingCredit: string | null }> {
   const apiKey = getApiKey();
   const url = new URL(`${BASE_URL}${path}`);
 
@@ -35,6 +35,7 @@ export async function get<T>(
   });
 
   if (!response.ok) {
+    let errorCode = response.status;
     let message = `SmailPro API error: ${response.status} ${response.statusText}`;
     try {
       const body = (await response.json()) as { detail?: string };
@@ -44,8 +45,15 @@ export async function get<T>(
     } catch {
       // ignore JSON parse error, use default message
     }
+    const remainingCredit = response.headers.get("x-remaining-credit");
+    if (errorCode === 402 || message.toLowerCase().includes("credit")) {
+      message += `\nInsufficient credits. Remaining: ${remainingCredit || "Unknown"}. Top up at my.sonjj.com`;
+    }
     throw new Error(message);
   }
 
-  return response.json() as Promise<T>;
+  return {
+    data: (await response.json()) as T,
+    remainingCredit: response.headers.get("x-remaining-credit"),
+  };
 }
