@@ -106,7 +106,7 @@ export function registerTempMailTools(server: McpServer): void {
         content: [
           {
             type: "text",
-            text: formatResponse("Generic Inbox", body, nextSteps, remainingCredit),
+            text: formatResponse("Custom Domain Inbox", body, nextSteps, remainingCredit),
           },
         ],
       };
@@ -146,7 +146,7 @@ export function registerTempMailTools(server: McpServer): void {
         content: [
           {
             type: "text",
-            text: formatResponse("Generic Message Content", body, nextSteps, remainingCredit),
+            text: formatResponse("Custom Domain Message Content", body, nextSteps, remainingCredit),
           },
         ],
       };

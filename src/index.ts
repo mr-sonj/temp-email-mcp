@@ -8,15 +8,15 @@ import { registerTempOutlookTools } from "./tools/temp-outlook.js";
 
 const server = new McpServer({
   name: "temp-email-mcp",
-  version: "1.0.0",
+  version: "1.1.1",
   description:
     "MCP server for SmailPro — access temporary Gmail, Outlook, and custom-domain email via AI assistants",
 });
 
-// Register all 12 tools
+// Register all 13 tools
 registerTempMailTools(server);    // 4 tools: TempMailAPI (custom domains)
 registerTempGmailTools(server);   // 5 tools: TempGmailAPI (5000+ Gmail pool)
-registerTempOutlookTools(server); // 3 tools: TempOutlookAPI (3000+ Outlook pool)
+registerTempOutlookTools(server); // 4 tools: TempOutlookAPI (3000+ Outlook pool)
 
 async function main() {
   const transport = new StdioServerTransport();
