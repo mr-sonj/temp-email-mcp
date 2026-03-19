@@ -1,0 +1,1196 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "SmailproAPI Documentation",
+    "version": "1.0.0",
+    "description": "\n## Quick Start\n\n### Prerequisites\nBefore using this API, you need to:\n\n1. **Create an account** at [my.sonjj.com](https://my.sonjj.com) to obtain your API key\n2. **Purchase credits** by following our guide: [SonjJ API Credits System Guide](https://sonjj.com/sonjj-api-credits-system-guide/)\n\n### Authentication\nAll API requests require authentication using an API key. Include your API key in the request header:\n\n```\nX-Api-Key: your_api_key_here\n```\n\n\n\nSmailpro API provides temporary Gmail addresses for receiving OTP messages, account registrations, newsletter subscriptions, and more. It allows users to generate and manage temporary Gmail inboxes without registering a real account."
+  },
+  "paths": {
+    "/v1/temp_email/domains": {
+      "get": {
+        "tags": [
+          "SmailproAPI"
+        ],
+        "summary": "Get allowed domains - points required: 1.00",
+        "description": "Retrieve a list of allowed domains for temporary email service.",
+        "operationId": "domains_temporary_email",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DomainsOut"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/temp_email/create": {
+      "get": {
+        "tags": [
+          "SmailproAPI"
+        ],
+        "summary": "Create temporary email - points required: 1.00",
+        "description": "Create a temporary email address with a specified expiration time.",
+        "operationId": "create_temporary_email",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The email address to be created.",
+              "title": "Email"
+            },
+            "description": "The email address to be created."
+          },
+          {
+            "name": "expiry_minutes",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Expiration time in minutes (max 20160)",
+              "default": 0,
+              "title": "Expiry Minutes"
+            },
+            "description": "Expiration time in minutes (max 20160)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/temp_email/inbox": {
+      "get": {
+        "tags": [
+          "SmailproAPI"
+        ],
+        "summary": "Get inbox - points required: 0.05",
+        "description": "Retrieve the inbox for a specified temporary email address. This will return all messages received by the temporary email.",
+        "operationId": "get_inbox",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The temporary email address whose message is to be retrieved.",
+              "title": "Email"
+            },
+            "description": "The temporary email address whose message is to be retrieved."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InboxOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/temp_email/message": {
+      "get": {
+        "tags": [
+          "SmailproAPI"
+        ],
+        "summary": "Get message - points required: 1.00",
+        "description": "Retrieve a specific message from the inbox of a temporary email address.",
+        "operationId": "get_message",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The temporary email address whose message is to be retrieved.",
+              "title": "Email"
+            },
+            "description": "The temporary email address whose message is to be retrieved."
+          },
+          {
+            "name": "mid",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The ID of the message to be retrieved.",
+              "title": "Mid"
+            },
+            "description": "The ID of the message to be retrieved."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/temp_gmail/list": {
+      "get": {
+        "tags": [
+          "SmailproAPI"
+        ],
+        "summary": "List temporary gmail - points required: 2.00",
+        "operationId": "list_temporary_gmail",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Page number",
+              "default": 1,
+              "title": "Page"
+            },
+            "description": "Page number"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Limit number",
+              "default": 10,
+              "title": "Limit"
+            },
+            "description": "Limit number"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Type of email (real or alias)",
+              "default": "alias",
+              "title": "Type"
+            },
+            "description": "Type of email (real or alias)"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Add a password to protect others from checking your message list",
+              "title": "Password"
+            },
+            "description": "Add a password to protect others from checking your message list"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListGmailOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/temp_gmail/inbox": {
+      "get": {
+        "tags": [
+          "SmailproAPI"
+        ],
+        "summary": "Inbox temporary gmail - points required: 0.05",
+        "operationId": "inbox_temporary_gmail",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Email"
+            }
+          },
+          {
+            "name": "timestamp",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "\nThe API will retrieve messages after this time\n",
+              "title": "Timestamp"
+            },
+            "description": "\nThe API will retrieve messages after this time\n"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InboxGmailOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/temp_gmail/message": {
+      "get": {
+        "tags": [
+          "SmailproAPI"
+        ],
+        "summary": "Message temporary gmail - points required: 1.50",
+        "operationId": "message_temporary_gmail",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Email"
+            }
+          },
+          {
+            "name": "mid",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Mid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageGmailOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/temp_gmail/random": {
+      "get": {
+        "tags": [
+          "SmailproAPI"
+        ],
+        "summary": "Get random temporary gmail - points required: 0.50",
+        "operationId": "random_temporary_gmail",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Type of email (real or alias)",
+              "default": "alias",
+              "title": "Type"
+            },
+            "description": "Type of email (real or alias)"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Add a password to protect others from checking your message list",
+              "title": "Password"
+            },
+            "description": "Add a password to protect others from checking your message list"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RandomGmailOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/temp_gmail/remove_message": {
+      "get": {
+        "tags": [
+          "SmailproAPI"
+        ],
+        "summary": "Remove message temporary gmail - beta",
+        "operationId": "remove_message_temporary_gmail",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Email"
+            }
+          },
+          {
+            "name": "mid",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Mid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/temp_outlook/list": {
+      "get": {
+        "tags": [
+          "SmailproAPI"
+        ],
+        "summary": "List temporary outlook - points required: 2.00",
+        "operationId": "list_temporary_outlook",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "alias",
+              "title": "Type"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListTempOutlookResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/temp_outlook/inbox": {
+      "get": {
+        "tags": [
+          "SmailproAPI"
+        ],
+        "summary": "Inbox temporary outlook - points required: 0.05",
+        "operationId": "inbox_temporary_outlook",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Email"
+            }
+          },
+          {
+            "name": "timestamp",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Timestamp"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InboxResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/temp_outlook/message": {
+      "get": {
+        "tags": [
+          "SmailproAPI"
+        ],
+        "summary": "Message temporary outlook - points required: 2.00",
+        "operationId": "message_temporary_outlook",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Email"
+            }
+          },
+          {
+            "name": "mid",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Mid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "InboxResponse": {
+        "properties": {
+          "messages": {
+            "items": {
+              "$ref": "#/components/schemas/InboxMessage"
+            },
+            "type": "array",
+            "title": "Messages",
+            "description": "List of inbox messages"
+          }
+        },
+        "type": "object",
+        "required": [
+          "messages"
+        ],
+        "title": "InboxResponse",
+        "description": "Response model for inbox messages."
+      },
+      "TempOutlookItem": {
+        "properties": {
+          "emails": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Emails",
+            "description": "List of temporary email addresses"
+          },
+          "timestamp": {
+            "type": "integer",
+            "title": "Timestamp",
+            "description": "Unix timestamp of the item creation"
+          }
+        },
+        "type": "object",
+        "required": [
+          "emails",
+          "timestamp"
+        ],
+        "title": "TempOutlookItem",
+        "description": "Represents a temporary item in the Outlook inbox."
+      },
+      "ListGmailOut": {
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/GmailData"
+            },
+            "type": "array",
+            "title": "Data",
+            "description": "The list of Gmail data"
+          },
+          "pagination": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/api__temp_gmail__v1__schemas__Pagination"
+              }
+            ],
+            "description": "Pagination information"
+          }
+        },
+        "type": "object",
+        "required": [
+          "data",
+          "pagination"
+        ],
+        "title": "ListGmailOut"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "MessageResponse": {
+        "properties": {
+          "body": {
+            "type": "string",
+            "title": "Body",
+            "description": "Body content of the message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "body"
+        ],
+        "title": "MessageResponse",
+        "description": "Response model for a single message content."
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "InboxMessage": {
+        "properties": {
+          "mid": {
+            "type": "string",
+            "title": "Mid",
+            "description": "Unique identifier for the message"
+          },
+          "textDate": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Textdate",
+            "description": "Date and time of the message"
+          },
+          "textTo": {
+            "type": "string",
+            "title": "Textto",
+            "description": "Recipient of the message"
+          },
+          "textFrom": {
+            "type": "string",
+            "title": "Textfrom",
+            "description": "Sender of the message"
+          },
+          "textSubject": {
+            "type": "string",
+            "title": "Textsubject",
+            "description": "Subject of the message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mid",
+          "textDate",
+          "textTo",
+          "textFrom",
+          "textSubject"
+        ],
+        "title": "InboxMessage",
+        "description": "Represents a message in the inbox."
+      },
+      "MessageOut": {
+        "properties": {
+          "body": {
+            "type": "string",
+            "title": "Body"
+          }
+        },
+        "type": "object",
+        "required": [
+          "body"
+        ],
+        "title": "MessageOut",
+        "description": "Schema representing the output of a message."
+      },
+      "RandomGmailOut": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "title": "Email",
+            "description": "Random Gmail address"
+          },
+          "timestamp": {
+            "type": "integer",
+            "title": "Timestamp",
+            "description": "Timestamp when the email was generated"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "real",
+              "alias"
+            ],
+            "title": "Type",
+            "description": "Type of email (real or alias)"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "timestamp",
+          "type"
+        ],
+        "title": "RandomGmailOut"
+      },
+      "MessageGmailOut": {
+        "properties": {
+          "body": {
+            "type": "string",
+            "title": "Body",
+            "description": "The body content of the Gmail message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "body"
+        ],
+        "title": "MessageGmailOut"
+      },
+      "ListTempOutlookResponse": {
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/TempOutlookItem"
+            },
+            "type": "array",
+            "title": "Data",
+            "description": "List of temporary Outlook items"
+          },
+          "pagination": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/api__temp_outlook__v1__schemas__Pagination"
+              }
+            ],
+            "description": "Pagination information"
+          }
+        },
+        "type": "object",
+        "required": [
+          "data",
+          "pagination"
+        ],
+        "title": "ListTempOutlookResponse",
+        "description": "Response model for listing temporary Outlook items."
+      },
+      "InboxItem": {
+        "properties": {
+          "mid": {
+            "type": "string",
+            "title": "Mid"
+          },
+          "textTo": {
+            "type": "string",
+            "title": "Textto"
+          },
+          "textFrom": {
+            "type": "string",
+            "title": "Textfrom"
+          },
+          "textSubject": {
+            "type": "string",
+            "title": "Textsubject"
+          },
+          "textDate": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Textdate"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mid",
+          "textTo",
+          "textFrom",
+          "textSubject",
+          "textDate"
+        ],
+        "title": "InboxItem",
+        "description": "Schema representing an item in the inbox."
+      },
+      "DomainsOut": {
+        "properties": {
+          "domains": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Domains"
+          }
+        },
+        "type": "object",
+        "required": [
+          "domains"
+        ],
+        "title": "DomainsOut",
+        "description": "Schema representing a list of domains."
+      },
+      "GmailData": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "title": "Email",
+            "description": "The email address of the Gmail user"
+          },
+          "timestamp": {
+            "type": "integer",
+            "title": "Timestamp",
+            "description": "The timestamp of the Gmail data"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "timestamp"
+        ],
+        "title": "GmailData"
+      },
+      "InboxGmailOut": {
+        "properties": {
+          "messages": {
+            "items": {
+              "$ref": "#/components/schemas/InboxGmailItem"
+            },
+            "type": "array",
+            "title": "Messages",
+            "description": "The list of Gmail inbox messages"
+          }
+        },
+        "type": "object",
+        "required": [
+          "messages"
+        ],
+        "title": "InboxGmailOut"
+      },
+      "InboxOut": {
+        "properties": {
+          "messages": {
+            "items": {
+              "$ref": "#/components/schemas/InboxItem"
+            },
+            "type": "array",
+            "title": "Messages"
+          }
+        },
+        "type": "object",
+        "required": [
+          "messages"
+        ],
+        "title": "InboxOut",
+        "description": "Schema representing the output of the inbox, containing multiple messages."
+      },
+      "InboxGmailItem": {
+        "properties": {
+          "mid": {
+            "type": "string",
+            "title": "Mid",
+            "description": "The message ID"
+          },
+          "textTo": {
+            "type": "string",
+            "title": "Textto",
+            "description": "The recipient email address"
+          },
+          "textFrom": {
+            "type": "string",
+            "title": "Textfrom",
+            "description": "The sender email address"
+          },
+          "textSubject": {
+            "type": "string",
+            "title": "Textsubject",
+            "description": "The subject of the email"
+          },
+          "textDate": {
+            "type": "string",
+            "title": "Textdate",
+            "description": "The date the email was sent"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mid",
+          "textTo",
+          "textFrom",
+          "textSubject",
+          "textDate"
+        ],
+        "title": "InboxGmailItem"
+      },
+      "api__temp_gmail__v1__schemas__Pagination": {
+        "properties": {
+          "page": {
+            "type": "integer",
+            "title": "Page",
+            "description": "The current page number"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit",
+            "description": "The number of items per page"
+          },
+          "total_count": {
+            "type": "integer",
+            "title": "Total Count",
+            "description": "The total number of items"
+          },
+          "total_pages": {
+            "type": "integer",
+            "title": "Total Pages",
+            "description": "The total number of pages"
+          }
+        },
+        "type": "object",
+        "required": [
+          "page",
+          "limit",
+          "total_count",
+          "total_pages"
+        ],
+        "title": "Pagination"
+      },
+      "api__temp_outlook__v1__schemas__Pagination": {
+        "properties": {
+          "page": {
+            "type": "integer",
+            "title": "Page",
+            "description": "Current page number"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit",
+            "description": "Number of items per page"
+          },
+          "total_count": {
+            "type": "integer",
+            "title": "Total Count",
+            "description": "Total number of items"
+          },
+          "total_pages": {
+            "type": "integer",
+            "title": "Total Pages",
+            "description": "Total number of pages"
+          }
+        },
+        "type": "object",
+        "required": [
+          "page",
+          "limit",
+          "total_count",
+          "total_pages"
+        ],
+        "title": "Pagination",
+        "description": "Represents pagination information for list responses."
+      }
+    },
+    "securitySchemes": {
+      "APIKeyHeader": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-Api-Key"
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "https://app.sonjj.com",
+      "description": "Production server"
+    },
+    {
+      "url": "http://localhost:8000",
+      "description": "Local development server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "SmailproAPI",
+      "description": "Smailpro API provides temporary Gmail addresses for receiving OTP messages, account registrations, newsletter subscriptions, and more. It allows users to generate and manage temporary Gmail inboxes without registering a real account."
+    }
+  ]
+}

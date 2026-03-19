@@ -1,0 +1,45 @@
+{
+  "name": "temp-email-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for SmailPro — Temporary Gmail & Outlook via AI assistants",
+  "keywords": [
+    "mcp",
+    "smailpro",
+    "temp-email",
+    "temp-gmail",
+    "temp-outlook",
+    "model-context-protocol"
+  ],
+  "author": "SonjJ <contact@sonjj.com>",
+  "license": "MIT",
+  "homepage": "https://smailpro.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sonjj/temp-email-mcp"
+  },
+  "bin": {
+    "temp-email-mcp": "dist/index.js"
+  },
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "inspector": "npx @modelcontextprotocol/inspector node dist/index.js",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.9.0",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
